@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -7,11 +6,6 @@ from rest_framework.utils import json
 
 from core.models import Recipe, Ingredient
 from recipe.serializers import RecipeSerializer
-
-
-def detail_url(recipe_id):
-    """Return recipe detail URL"""
-    return reverse('recipe:recipe-detail', args=[recipe_id])
 
 
 def sample_ingredient(name='Cinnamon', recipe={'name': 'Some name recipe'}):
