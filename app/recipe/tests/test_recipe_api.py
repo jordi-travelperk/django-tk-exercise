@@ -24,7 +24,7 @@ def sample_recipe(**params):
     return Recipe.objects.create(**defaults)
 
 
-class PrivateRecipeApiTests(TestCase):
+class RecipeApiTests(TestCase):
     """Test unauthenticated recipe API access"""
     def setUp(self):
         self.client = APIClient()
@@ -95,6 +95,7 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_recipe(self):
+        """Test DELETE recipe"""
         recipe1 = sample_recipe()
         sample_ingredient(name='cheese', recipe=recipe1)
 
@@ -108,6 +109,7 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEquals(len(recipes_empty), 0)
 
     def test_update_recipe(self):
+        """Test PATCH recipe"""
         recipe1 = sample_recipe()
         sample_ingredient(name='cheese', recipe=recipe1)
 
@@ -141,6 +143,7 @@ class PrivateRecipeApiTests(TestCase):
                       serializer1.data['ingredients'])
 
     def test_search_recipe(self):
+        """Test GET search by name"""
         recipe1 = sample_recipe()
         sample_ingredient(name='cheese', recipe=recipe1)
 
@@ -149,6 +152,7 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEquals(len(res.data), 1)
 
     def test_search_recipe_not_found(self):
+        """Test GET search by name - no expected results"""
         res = self.client.get('/recipes/?name=thisdoesnotexists')
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEquals(len(res.data), 0)
