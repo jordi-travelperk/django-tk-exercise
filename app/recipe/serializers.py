@@ -22,19 +22,25 @@ class RecipeSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
     def create(self, validated_data):
-        recipe = Recipe.objects.create(**validated_data)
         ingredients = validated_data.pop('ingredients')
+        recipe = Recipe.objects.create(**validated_data)
+
         for ingredient in ingredients:
             Ingredient.objects.create(recipe=recipe, **ingredient)
 
         return recipe
 
     def update(self, instance, validated_data):
-        ingredients = validated_data.pop('ingredients', None)
-        if ingredients is not None:  # if an empty list is passed we need to delete all the ingredients
-            instance.ingredients.all().delete()
-            for ingredient in ingredients:
-                Ingredient.objects.create(recipe=instance, **ingredient)
-        Recipe.objects.filter(pk=instance.id).update(**validated_data)
+        ingredients = validated_data.pop('ingredients')
+
+        instance.name = validated_data.get('name', instance.name)
+        instance.description = validated_data.get('description',
+                                                  instance.description)
+        instance.save()
+        instance.ingredients.all().delete()
+
+        for ingredient in ingredients:
+            instance.ingredients.add(
+                Ingredient.objects.create(**ingredient, recipe_id=instance.id))
 
         return instance

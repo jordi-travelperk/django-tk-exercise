@@ -1,9 +1,5 @@
-from rest_framework.mixins import ListModelMixin, DestroyModelMixin
 from rest_framework import viewsets, mixins
-
-
-from core.models import Ingredient, Recipe
-
+from core.models import Recipe
 from recipe import serializers
 
 
@@ -13,12 +9,15 @@ class RecipeViewSet(viewsets.GenericViewSet,
                     mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin):
-    """Manage recipes in the database"""
+    """
+    API endpoint that allows recipes to be created, viewed, edited or deleted.
+    """
+
     serializer_class = serializers.RecipeSerializer
     queryset = Recipe.objects.all()
 
     def get_queryset(self):
-        """Retrieve the recipes for the authenticated user"""
+        """Query recipes based on name query param"""
         name_param = self.request.query_params.get('name')
         queryset = self.queryset
         if name_param:
