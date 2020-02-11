@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.urls import reverse
 
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -9,7 +8,7 @@ from core.models import Recipe, Ingredient
 from recipe.serializers import RecipeSerializer
 
 
-def sample_ingredient(name='Cinnamon', recipe={'name': 'Some default name recipe'}):
+def sample_ingredient(name='Cinnamon', recipe={'name': 'Some name recipe'}):
     """Create and return a sample ingredient"""
     return Ingredient.objects.create(name=name, recipe=recipe)
 
