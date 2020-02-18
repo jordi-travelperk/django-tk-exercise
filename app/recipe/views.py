@@ -23,4 +23,4 @@ class RecipeViewSet(viewsets.GenericViewSet,
         if name_param:
             queryset = queryset.filter(name__contains=name_param)
 
-        return queryset
+        return queryset.order_by('-id').distinct()
